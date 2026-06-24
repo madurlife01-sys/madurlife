@@ -30,41 +30,70 @@ export default async function StoreLayout({
         <main className="flex-1">{children}</main>
       </PageTransitionWrapper>
 
-      <footer className="border-t border-border bg-white/50 backdrop-blur-sm dark:bg-zinc-900/50">
+      <footer className="bg-primary text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="py-12">
-            <div className="grid gap-8 sm:grid-cols-3">
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-emerald-600 text-sm font-bold text-white">
-                    🌾
-                  </span>
-                  <span className="text-lg font-bold font-serif text-foreground">
-                    Madur<span className="text-primary">Life</span>
+          <div className="py-16">
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+              {/* Brand */}
+              <div className="lg:col-span-1">
+                <div className="flex items-center gap-2.5 mb-5">
+                  <img
+                    src="/brand/icon.jpeg"
+                    alt="Madur Life"
+                    className="h-10 w-10 rounded-xl object-cover"
+                  />
+                  <span className="text-xl font-bold font-serif">
+                    Madur<span className="text-white/80">Life</span>
                   </span>
                 </div>
-                <p className="text-sm text-muted leading-relaxed">
-                  Premium organic flour, grains & spices from the heart of Karnataka.
+                <p className="text-sm text-white/60 leading-relaxed max-w-xs">
+                  Home of healthy grains. Global flavour. Freshly milled, naturally processed, packed with love.
                 </p>
               </div>
+
+              {/* Shop */}
               <div>
-                <h4 className="text-sm font-semibold text-foreground mb-3">Quick Links</h4>
-                <div className="space-y-2">
-                  <Link href="/products" className="block text-sm text-muted hover:text-primary transition-colors">Products</Link>
-                  <Link href="/my-orders" className="block text-sm text-muted hover:text-primary transition-colors">My Orders</Link>
+                <h4 className="text-xs font-bold tracking-widest uppercase text-white/40 mb-4">Shop</h4>
+                <div className="space-y-3">
+                  <Link href="/products" className="block text-sm text-white/70 hover:text-white transition-colors">All Products</Link>
+                  <Link href="/products?category=flours" className="block text-sm text-white/70 hover:text-white transition-colors">Flours</Link>
+                  <Link href="/products?category=ravas" className="block text-sm text-white/70 hover:text-white transition-colors">Ravas</Link>
                 </div>
               </div>
+
+              {/* Company */}
               <div>
-                <h4 className="text-sm font-semibold text-foreground mb-3">Contact</h4>
-                <div className="space-y-2 text-sm text-muted">
-                  <p>Karnataka, India</p>
-                  <p>madurlife01@gmail.com</p>
+                <h4 className="text-xs font-bold tracking-widest uppercase text-white/40 mb-4">Company</h4>
+                <div className="space-y-3">
+                  <Link href="/our-story" className="block text-sm text-white/70 hover:text-white transition-colors">Our Story</Link>
+                  <Link href="/products" className="block text-sm text-white/70 hover:text-white transition-colors">Contact</Link>
+                </div>
+              </div>
+
+              {/* Get in Touch */}
+              <div>
+                <h4 className="text-xs font-bold tracking-widest uppercase text-white/40 mb-4">Get in Touch</h4>
+                <div className="space-y-2 text-sm text-white/70">
+                  <p>Akshatha Traders</p>
+                  <p>Matter Thota, Harapanahalli,</p>
+                  <p>Vijayanagar, Karnataka</p>
+                  <p className="mt-3">FSSAI Lic. 21225337001107</p>
+                  <a href="tel:+919483205069" className="inline-block mt-2 text-white font-semibold hover:text-white/80 transition-colors">
+                    +91 94832 05069
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-          <div className="border-t border-border py-6 text-center text-sm text-muted">
-            &copy; {new Date().getFullYear()} Madur Life. All rights reserved. Crafted with care in Karnataka.
+
+          {/* Bottom Bar */}
+          <div className="border-t border-white/10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-white/40">
+              © {new Date().getFullYear()} Madur Life · Akshatha Traders
+            </p>
+            <p className="text-xs text-white/40">
+              Good Food · Good Health · Good Life
+            </p>
           </div>
         </div>
       </footer>

@@ -1,27 +1,11 @@
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { GrainParticlesWrapper } from "@/components/grain-particles-wrapper";
 import { getServerTranslations } from "@/lib/i18n/server";
 import { AnimateIn } from "@/components/animate-in";
-
-const categoryGradients = [
-  "from-emerald-500/10 via-green-500/5 to-teal-500/10",
-  "from-amber-500/10 via-yellow-500/5 to-orange-500/10",
-  "from-rose-500/10 via-pink-500/5 to-red-500/10",
-  "from-blue-500/10 via-indigo-500/5 to-violet-500/10",
-  "from-orange-500/10 via-amber-500/5 to-yellow-500/10",
-];
-
-const categoryEmojis = ["🌾", "🌿", "🌶️", "📦", "🍃"];
 
 export default async function Home() {
   const supabase = await createServerSupabaseClient();
   const { t } = await getServerTranslations();
-
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("*")
-    .order("name_en");
 
   const { data: featuredProducts } = await supabase
     .from("products")
@@ -32,126 +16,115 @@ export default async function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 sm:py-28 lg:py-36">
-        {/* Decorative Background */}
-        <div
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(ellipse at 20% 40%, rgba(26,122,74,0.10) 0%, transparent 55%), radial-gradient(ellipse at 80% 20%, rgba(245,200,66,0.08) 0%, transparent 50%), radial-gradient(ellipse at 60% 90%, rgba(139,94,60,0.06) 0%, transparent 50%), var(--background)",
-          }}
-        />
-        <GrainParticlesWrapper />
-
-        {/* Decorative Floating Elements */}
-        <div className="absolute top-20 left-[10%] text-4xl opacity-20 animate-float select-none pointer-events-none" aria-hidden="true">🌾</div>
-        <div className="absolute top-32 right-[12%] text-3xl opacity-15 animate-float-delayed select-none pointer-events-none" aria-hidden="true">🌿</div>
-        <div className="absolute bottom-20 left-[20%] text-2xl opacity-15 animate-float select-none pointer-events-none" aria-hidden="true">🌶️</div>
-        <div className="absolute bottom-32 right-[18%] text-3xl opacity-10 animate-float-delayed select-none pointer-events-none" aria-hidden="true">🍃</div>
-
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <AnimateIn animation="fade-in-up">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/5 border border-primary/10 px-4 py-1.5 mb-8">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-glow"></span>
-              <span className="text-xs font-medium text-primary tracking-wide uppercase">From Karnataka, With Love</span>
-            </div>
-          </AnimateIn>
-
-          <AnimateIn animation="fade-in-up" delay={100}>
-            <h1 className="font-serif text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1]">
-              {t.home.heroTitle.split(" ").slice(0, -1).join(" ")}{" "}
-              <span className="text-gradient">
-                {t.home.heroTitle.split(" ").slice(-1)}
-              </span>
-            </h1>
-          </AnimateIn>
-
-          <AnimateIn animation="fade-in-up" delay={200}>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted leading-relaxed">
-              {t.home.heroSubtitle}
-            </p>
-          </AnimateIn>
-
-          <AnimateIn animation="fade-in-up" delay={300}>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/products" className="btn-primary">
-                {t.home.shopNow}
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+      <section className="relative overflow-hidden bg-[#f8f6f0]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+          <div className="max-w-3xl">
+            <AnimateIn animation="fade-in-up">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-1.5 mb-8">
+                <svg className="h-3.5 w-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
                 </svg>
-              </Link>
-              <Link href="/products" className="btn-secondary">
-                View Products
-              </Link>
-            </div>
-          </AnimateIn>
+                <span className="text-xs font-semibold text-primary tracking-wider uppercase">100% Natural · Freshly Milled</span>
+              </div>
+            </AnimateIn>
 
-          {/* Trust Badges */}
-          <AnimateIn animation="fade-in-up" delay={400}>
-            <div className="mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-8">
-              {[
-                { icon: "✓", label: "100% Natural" },
-                { icon: "🌱", label: "Farm Fresh" },
-                { icon: "📍", label: "Made in Karnataka" },
-                { icon: "🚚", label: "Free Delivery" },
-              ].map((badge) => (
-                <div key={badge.label} className="flex items-center gap-2 text-sm text-muted">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/8 text-primary text-xs font-bold">
-                    {badge.icon}
-                  </span>
-                  <span className="font-medium">{badge.label}</span>
-                </div>
-              ))}
-            </div>
-          </AnimateIn>
+            <AnimateIn animation="fade-in-up" delay={100}>
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
+                <span className="text-foreground">Home of </span>
+                <span className="text-gradient">Healthy</span>
+                <br />
+                <span className="text-gradient">Grains,</span>
+                <br />
+                <span className="text-foreground">Global Flavour.</span>
+              </h1>
+            </AnimateIn>
+
+            <AnimateIn animation="fade-in-up" delay={200}>
+              <p className="mt-8 max-w-xl text-lg text-muted leading-relaxed">
+                Madhur Life was born from the idea of bringing people back to nature
+                — where food is medicine and grains are the treasure of health.
+                Wholesome goodness in every pack.
+              </p>
+            </AnimateIn>
+
+            <AnimateIn animation="fade-in-up" delay={300}>
+              <div className="mt-10 flex flex-col sm:flex-row items-start gap-4">
+                <Link
+                  href="/products"
+                  className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:bg-primary/90 hover:scale-105 transition-all duration-200"
+                >
+                  Shop Pure. Live Better.
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/our-story"
+                  className="inline-flex h-14 items-center justify-center rounded-full border-2 border-foreground/20 px-8 text-sm font-semibold text-foreground hover:border-foreground/40 hover:bg-foreground/5 transition-all duration-200"
+                >
+                  Our Story
+                </Link>
+              </div>
+            </AnimateIn>
+
+            <AnimateIn animation="fade-in-up" delay={400}>
+              <div className="mt-14 flex flex-wrap items-center gap-8">
+                {[
+                  { icon: <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>, label: "No Additives" },
+                  { icon: <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>, label: "Premium Grains" },
+                  { icon: <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>, label: "Sourced with Care" },
+                ].map((badge) => (
+                  <div key={badge.label} className="flex items-center gap-2 text-sm text-muted">
+                    <span className="text-primary">{badge.icon}</span>
+                    <span className="font-medium">{badge.label}</span>
+                  </div>
+                ))}
+              </div>
+            </AnimateIn>
+          </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      {categories && categories.length > 0 && (
-        <section className="py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <AnimateIn>
-              <div className="text-center mb-12">
-                <h2 className="font-serif text-2xl font-semibold text-foreground sm:text-3xl">
-                  {t.home.categories}
-                </h2>
-                <p className="mt-3 text-muted">Explore our range of premium organic products</p>
+      {/* Features Bar */}
+      <section className="border-y border-border bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-border">
+            {[
+              { title: "Freshly Milled", desc: "Daily from premium grains" },
+              { title: "100% Natural", desc: "No additives, ever" },
+              { title: "FSSAI Certified", desc: "Lic. 21225337001107" },
+              { title: "Order Tracking", desc: "Sign in to track your order" },
+            ].map((item) => (
+              <div key={item.title} className="py-6 px-6 text-center">
+                <p className="font-semibold text-foreground text-sm">{item.title}</p>
+                <p className="mt-1 text-xs text-muted">{item.desc}</p>
               </div>
-            </AnimateIn>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {categories.map((cat, i) => (
-                <AnimateIn key={cat.id} delay={i * 80}>
-                  <Link
-                    href={`/products?category=${cat.slug}`}
-                    className="group block rounded-2xl p-6 sm:p-8 premium-card relative overflow-hidden border border-border bg-white dark:bg-zinc-900"
-                  >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${categoryGradients[i % categoryGradients.length]} opacity-60 group-hover:opacity-100 transition-opacity duration-500`} />
-                    <div className="relative z-10">
-                      <span className="text-3xl mb-3 block">{categoryEmojis[i % categoryEmojis.length]}</span>
-                      <h3 className="font-serif text-lg font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                        {cat.name_en}
-                      </h3>
-                      <p className="mt-1 text-sm text-muted">Explore collection →</p>
-                    </div>
-                  </Link>
-                </AnimateIn>
-              ))}
-            </div>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* Featured Products */}
+      {/* Best Sellers */}
       {featuredProducts && featuredProducts.length > 0 && (
-        <section className="py-16 sm:py-20 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent">
+        <section className="py-16 sm:py-20 bg-[#f8f6f0]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <AnimateIn>
-              <div className="text-center mb-12">
-                <h2 className="font-serif text-2xl font-semibold text-foreground sm:text-3xl">
-                  {t.home.featured}
-                </h2>
-                <p className="mt-3 text-muted">Handpicked favorites our customers love</p>
+              <div className="flex items-end justify-between mb-10">
+                <div>
+                  <p className="text-xs font-bold text-primary tracking-widest uppercase mb-2">Best Sellers</p>
+                  <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
+                    Wholesome goodness in every pack
+                  </h2>
+                </div>
+                <Link
+                  href="/products"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  View all
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
               </div>
             </AnimateIn>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -159,7 +132,7 @@ export default async function Home() {
                 <AnimateIn key={product.id} delay={i * 100}>
                   <Link
                     href={`/products/${product.slug}`}
-                    className="group block rounded-2xl border border-border bg-white dark:bg-zinc-900 overflow-hidden card-hover"
+                    className="group block rounded-2xl border border-border bg-white overflow-hidden card-hover"
                   >
                     <div className="aspect-square overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 relative">
                       {product.images && product.images.length > 0 ? (
@@ -169,16 +142,18 @@ export default async function Home() {
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-muted text-sm font-medium">
-                          <div className="text-center">
-                            <span className="text-4xl block mb-2">🌾</span>
-                            {product.name_en}
-                          </div>
+                        <div className="w-full h-full flex items-center justify-center">
+                          <img src="/brand/icon.jpeg" alt="Madur Life" className="w-20 h-20 rounded-2xl object-cover opacity-30" />
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
                     <div className="p-4">
+                      {product.categories && (
+                        <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">
+                          {product.categories.name_en}
+                        </p>
+                      )}
                       <h3 className="font-medium text-card-foreground group-hover:text-primary transition-colors line-clamp-1">
                         {product.name_en}
                       </h3>
@@ -191,92 +166,43 @@ export default async function Home() {
                 </AnimateIn>
               ))}
             </div>
+            <div className="mt-8 text-center sm:hidden">
+              <Link
+                href="/products"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
+              >
+                View all products
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </section>
       )}
 
-      {/* Why Madur Life */}
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Quality Promise Section */}
+      <section className="py-20 sm:py-28 bg-primary">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimateIn>
-            <div className="text-center mb-12">
-              <h2 className="font-serif text-2xl font-semibold text-foreground sm:text-3xl">
-                Why Madur Life?
-              </h2>
-              <p className="mt-3 text-muted">What makes our products different</p>
-            </div>
-          </AnimateIn>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { icon: "🌿", title: "100% Organic", desc: "No chemicals, no preservatives. Just pure, natural ingredients." },
-              { icon: "🏔️", title: "Karnataka Origin", desc: "Sourced directly from local farms across Karnataka." },
-              { icon: "🫙", title: "Freshly Ground", desc: "Ground fresh on order to ensure maximum nutrition & taste." },
-              { icon: "💚", title: "Fair Trade", desc: "Supporting local farmers with fair, sustainable pricing." },
-            ].map((item, i) => (
-              <AnimateIn key={item.title} delay={i * 100}>
-                <div className="group rounded-2xl border border-border bg-white dark:bg-zinc-900 p-6 sm:p-8 card-hover text-center">
-                  <span className="text-4xl block mb-4">{item.icon}</span>
-                  <h3 className="font-serif text-lg font-semibold text-card-foreground">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </AnimateIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonial */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-primary/[0.03] to-transparent">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <AnimateIn>
-            <div className="rounded-3xl border border-border bg-white dark:bg-zinc-900 p-8 sm:p-12 shadow-sm">
-              <div className="text-5xl mb-6">"</div>
-              <p className="font-serif text-xl sm:text-2xl text-card-foreground leading-relaxed italic">
-                The atta from Madur Life is the best I've ever used. My rotis are softer, fluffier, and taste incredible. You can truly feel the difference of freshly ground flour.
-              </p>
-              <div className="mt-8">
-                <div className="flex items-center justify-center gap-1 text-secondary text-lg mb-2">
-                  ★ ★ ★ ★ ★
-                </div>
-                <p className="font-medium text-card-foreground">A Happy Customer</p>
-                <p className="text-sm text-muted">Karnataka</p>
-              </div>
-            </div>
-          </AnimateIn>
-        </div>
-      </section>
-
-      {/* CTA Banner */}
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimateIn>
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-emerald-700 to-primary p-8 sm:p-12 lg:p-16 text-center text-white">
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-4 left-[10%] text-6xl">🌾</div>
-                <div className="absolute bottom-4 right-[10%] text-5xl">🌿</div>
-              </div>
-              <div className="relative z-10">
-                <h2 className="font-serif text-2xl sm:text-3xl font-bold mb-4">
-                  Ready to taste the difference?
-                </h2>
-                <p className="text-white/80 max-w-lg mx-auto mb-8">
-                  Order now and experience the goodness of freshly ground, organic products delivered to your doorstep.
-                </p>
-                <Link
-                  href="/products"
-                  className="inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-sm font-semibold text-primary shadow-lg hover:bg-white/90 hover:scale-105 transition-all duration-200"
-                >
-                  Shop Now
-                  <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
+            <svg className="h-10 w-10 mx-auto mb-6 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+            </svg>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              Because quality is not an option — it&apos;s a promise.
+            </h2>
+            <p className="mt-6 text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+              Just as the leaves protect and nourish, Madhur Life celebrates wholesome grains that have sustained generations. Handpicked ingredients. Unmatched standards.
+            </p>
+            <Link
+              href="/products"
+              className="mt-10 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white px-10 text-sm font-bold text-primary shadow-lg hover:bg-white/90 hover:scale-105 transition-all duration-200"
+            >
+              Bring Home the Goodness
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </Link>
           </AnimateIn>
         </div>
       </section>

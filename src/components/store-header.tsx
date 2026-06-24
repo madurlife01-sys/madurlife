@@ -14,6 +14,7 @@ interface StoreHeaderProps {
 
 const navLinks = (t: any) => [
   { href: "/products", label: t.nav.products },
+  { href: "/our-story", label: "Our Story" },
 ];
 
 export default function StoreHeader({ isAdmin }: StoreHeaderProps) {
@@ -26,11 +27,9 @@ export default function StoreHeader({ isAdmin }: StoreHeaderProps) {
   return (
     <>
       {/* Announcement Bar */}
-      <div className="relative z-50 bg-gradient-to-r from-primary via-primary to-emerald-700 text-primary-foreground">
+      <div className="relative z-50 bg-primary text-white">
         <div className="mx-auto flex h-9 max-w-7xl items-center justify-center px-4 text-xs font-medium tracking-wide sm:text-sm">
-          <span className="mr-2 inline-block">🌾</span>
           Free delivery on orders above ₹500
-          <span className="ml-2 inline-block">🌾</span>
         </div>
       </div>
 
@@ -39,9 +38,11 @@ export default function StoreHeader({ isAdmin }: StoreHeaderProps) {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href="/" className="group flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-emerald-600 text-base font-bold text-white shadow-md shadow-primary/20 transition-shadow group-hover:shadow-lg group-hover:shadow-primary/30">
-              🌾
-            </span>
+            <img
+              src="/brand/icon.jpeg"
+              alt="Madur Life"
+              className="h-9 w-9 rounded-xl object-cover shadow-md shadow-primary/20 transition-shadow group-hover:shadow-lg group-hover:shadow-primary/30"
+            />
             <span className="text-xl font-bold tracking-tight text-foreground font-serif">
               Madur<span className="text-primary">Life</span>
             </span>

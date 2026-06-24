@@ -2,11 +2,12 @@ import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getServerTranslations } from "@/lib/i18n/server";
 import { AnimateIn } from "@/components/animate-in";
+import { ProductSearch } from "@/components/product-search";
 
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; q?: string }>;
 }) {
   const supabase = await createServerSupabaseClient();
   const params = await searchParams;
@@ -25,6 +26,10 @@ export default async function ProductsPage({
     query = query.eq("categories.slug", params.category);
   }
 
+  if (params.q) {
+    query = query.ilike("name_en", `%${params.q}%`);
+  }
+
   const { data: products } = await query.order("created_at", {
     ascending: false,
   });
@@ -40,32 +45,37 @@ export default async function ProductsPage({
         </div>
       </AnimateIn>
 
-      {/* Category Filters */}
+      {/* Search and Filters */}
       <AnimateIn delay={100}>
-        <div className="mb-8 flex flex-wrap gap-2">
-          <Link
-            href="/products"
-            className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-medium transition-all duration-200 ${
-              !params.category
-                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                : "bg-white dark:bg-zinc-800 text-foreground border border-border hover:border-primary/30 hover:bg-primary/5"
-            }`}
-          >
-            {t.common.all}
-          </Link>
-          {categories?.map((cat) => (
+        <div className="mb-8 flex flex-col sm:flex-row gap-4">
+          <div className="w-full sm:w-80">
+            <ProductSearch />
+          </div>
+          <div className="flex flex-wrap gap-2">
             <Link
-              key={cat.id}
-              href={`/products?category=${cat.slug}`}
+              href="/products"
               className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-medium transition-all duration-200 ${
-                params.category === cat.slug
+                !params.category
                   ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
                   : "bg-white dark:bg-zinc-800 text-foreground border border-border hover:border-primary/30 hover:bg-primary/5"
               }`}
             >
-              {cat.name_en}
+              {t.common.all}
             </Link>
-          ))}
+            {categories?.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/products?category=${cat.slug}${params.q ? `&q=${params.q}` : ""}`}
+                className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-medium transition-all duration-200 ${
+                  params.category === cat.slug
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    : "bg-white dark:bg-zinc-800 text-foreground border border-border hover:border-primary/30 hover:bg-primary/5"
+                }`}
+              >
+                {cat.name_en}
+              </Link>
+            ))}
+          </div>
         </div>
       </AnimateIn>
 
@@ -86,13 +96,9 @@ export default async function ProductsPage({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <div className="text-center">
-                      <span className="text-5xl block mb-3">🌾</span>
-                      <span className="text-sm font-medium text-muted">{product.name_en}</span>
-                    </div>
+                    <img src="/brand/icon.jpeg" alt="Madur Life" className="w-16 h-16 rounded-xl object-cover opacity-30" />
                   </div>
                 )}
-                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-6">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-4 py-1.5 text-xs font-semibold text-primary shadow-lg backdrop-blur-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                     View Details
@@ -128,11 +134,11 @@ export default async function ProductsPage({
         ))}
         {(!products || products.length === 0) && (
           <div className="col-span-full text-center py-20">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/5">
-              <span className="text-4xl">🌾</span>
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-primary/5">
+              <img src="/brand/icon.jpeg" alt="Madur Life" className="w-16 h-16 rounded-xl object-cover opacity-40" />
             </div>
             <p className="text-lg font-medium text-foreground mb-2">No products found</p>
-            <p className="text-sm text-muted mb-6">{t.common.noResults}</p>
+            <p className="text-sm text-muted mb-6">{params.q ? `No results for "${params.q}"` : t.common.noResults}</p>
             <Link href="/products" className="btn-primary inline-flex">
               View All Products
             </Link>

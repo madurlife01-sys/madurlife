@@ -5,6 +5,7 @@ import { getServerTranslations } from "@/lib/i18n/server";
 import { AddToCartSection } from "@/components/add-to-cart-section";
 import { AnimateIn } from "@/components/animate-in";
 import { FloatingIngredientsWrapper } from "@/components/floating-ingredients-wrapper";
+import { ProductImageGallery } from "@/components/product-image-gallery";
 
 export default async function ProductDetailPage({
   params,
@@ -66,34 +67,10 @@ export default async function ProductDetailPage({
         <div className="grid gap-8 lg:gap-12 lg:grid-cols-2">
           {/* Image Gallery */}
           <AnimateIn animation="slide-in-left">
-            <div className="sticky top-24">
-              <div className="aspect-square rounded-3xl overflow-hidden border border-border bg-white dark:bg-zinc-900 shadow-sm">
-                {product.images && product.images.length > 0 ? (
-                  <img
-                    src={product.images[0]}
-                    alt={product.name_en}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
-                    <div className="text-center">
-                      <span className="text-7xl block mb-4">🌾</span>
-                      <span className="text-lg font-medium text-muted">{product.name_en}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-              {/* Thumbnail row if multiple images */}
-              {product.images && product.images.length > 1 && (
-                <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
-                  {product.images.map((img: string, i: number) => (
-                    <div key={i} className="h-20 w-20 shrink-0 rounded-xl overflow-hidden border-2 border-border hover:border-primary transition-colors cursor-pointer">
-                      <img src={img} alt="" className="h-full w-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <ProductImageGallery
+              images={product.images || []}
+              name={product.name_en}
+            />
           </AnimateIn>
 
           {/* Product Info */}
