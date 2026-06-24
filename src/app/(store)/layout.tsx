@@ -30,7 +30,7 @@ export default async function StoreLayout({
         <main className="flex-1">{children}</main>
       </PageTransitionWrapper>
 
-      <footer className="bg-primary text-white">
+      <footer className="bg-[#1a6b3c] text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="py-16">
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
