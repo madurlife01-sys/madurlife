@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useAuth } from "@clerk/nextjs";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useCart } from "@/store/cart";
 import { useLanguage } from "@/hooks/use-language";
@@ -23,6 +23,7 @@ export default function StoreHeader({ isAdmin }: StoreHeaderProps) {
   const { getItemCount } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const itemCount = getItemCount();
+  const { isSignedIn } = useAuth();
 
   return (
     <>
@@ -75,6 +76,7 @@ export default function StoreHeader({ isAdmin }: StoreHeaderProps) {
           <div className="flex items-center gap-2">
             <LanguageToggle />
 
+            {/* Cart */}
             <Link
               href="/cart"
               className="relative flex h-10 w-10 items-center justify-center rounded-xl text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
@@ -89,28 +91,53 @@ export default function StoreHeader({ isAdmin }: StoreHeaderProps) {
               )}
             </Link>
 
-            {isAdmin && (
-              <Link
-                href="/admin"
-                className="hidden sm:inline-flex h-9 items-center justify-center rounded-full bg-gray-100 px-4 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors"
-              >
-                Dashboard
-              </Link>
+            {/* Desktop: Signed In */}
+            {isSignedIn && (
+              <>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="hidden sm:inline-flex h-9 items-center justify-center rounded-full bg-gray-100 px-4 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <div className="hidden md:flex items-center gap-3 ml-1">
+                  <Link
+                    href="/my-orders"
+                    className={`text-sm font-medium transition-colors px-3 py-1.5 rounded-lg ${
+                      pathname === "/my-orders"
+                        ? "text-[#1a6b3c] bg-[#1a6b3c]/5"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    }`}
+                  >
+                    My Orders
+                  </Link>
+                  <UserButton
+                    userProfileMode="navigation"
+                    userProfileUrl="/my-orders"
+                  />
+                </div>
+              </>
             )}
 
-            <div className="hidden md:flex items-center gap-3 ml-1">
-              <Link
-                href="/my-orders"
-                className={`text-sm font-medium transition-colors px-3 py-1.5 rounded-lg ${
-                  pathname === "/my-orders"
-                    ? "text-[#1a6b3c] bg-[#1a6b3c]/5"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                }`}
-              >
-                {t.nav.signIn === "Sign In" ? "My Orders" : "ನನ್ನ ಆರ್ಡರ್‌ಗಳು"}
-              </Link>
-              <UserButton />
-            </div>
+            {/* Desktop: Signed Out */}
+            {!isSignedIn && (
+              <div className="hidden md:flex items-center gap-2 ml-1">
+                <Link
+                  href="/sign-in"
+                  className="inline-flex h-9 items-center justify-center rounded-full border border-gray-300 px-5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="inline-flex h-9 items-center justify-center rounded-full bg-[#1a6b3c] px-5 text-sm font-medium text-white hover:bg-[#155a30] transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
@@ -142,25 +169,49 @@ export default function StoreHeader({ isAdmin }: StoreHeaderProps) {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/my-orders"
-                onClick={() => setMobileOpen(false)}
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
-              >
-                {t.nav.signIn === "Sign In" ? "My Orders" : "ನನ್ನ ಆರ್ಡರ್‌ಗಳು"}
-              </Link>
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  onClick={() => setMobileOpen(false)}
-                  className="block rounded-lg px-4 py-2.5 text-sm font-medium text-[#1a6b3c] hover:bg-[#1a6b3c]/5 transition-colors"
-                >
-                  Dashboard
-                </Link>
+
+              {isSignedIn && (
+                <>
+                  <Link
+                    href="/my-orders"
+                    onClick={() => setMobileOpen(false)}
+                    className="block rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                  >
+                    My Orders
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setMobileOpen(false)}
+                      className="block rounded-lg px-4 py-2.5 text-sm font-medium text-[#1a6b3c] hover:bg-[#1a6b3c]/5 transition-colors"
+                    >
+                      Dashboard
+                    </Link>
+                  )}
+                  <div className="border-t border-gray-200 pt-3 mt-3">
+                    <UserButton />
+                  </div>
+                </>
               )}
-              <div className="border-t border-gray-200 pt-3 mt-3 flex items-center gap-3">
-                <UserButton />
-              </div>
+
+              {!isSignedIn && (
+                <>
+                  <Link
+                    href="/sign-in"
+                    onClick={() => setMobileOpen(false)}
+                    className="block rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    onClick={() => setMobileOpen(false)}
+                    className="block rounded-lg px-4 py-2.5 text-sm font-medium text-[#1a6b3c] hover:bg-[#1a6b3c]/5 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
