@@ -20,7 +20,7 @@ export default async function ProductsPage({
 
   let query = supabase
     .from("products")
-    .select("*, categories!inner(name_en, slug)");
+    .select("*, categories(name_en, slug)");
 
   if (params.category) {
     query = query.eq("categories.slug", params.category);
